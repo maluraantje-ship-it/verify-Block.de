@@ -1,0 +1,2 @@
+node_modules
+.env   # 👉 GANZ WICHTIG (sonst wird dein Token geleakt!)
