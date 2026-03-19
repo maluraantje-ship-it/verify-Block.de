@@ -5,31 +5,35 @@ const path = require('path');
 
 const app = express();
 
-// ENV Variablen
+// 👉 KOMMT AUS .env (nicht hier eintragen!)
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
+// 👉 HIER DEINE DISCORD SERVER ID EINTRAGEN
 const GUILD_ID = "1484233139080527902";
+
+// 👉 DAS HAST DU SCHON (Whitelist Rolle)
 const ROLE_ID = "1484257344488603728";
 
-// Frontend bereitstellen
+// Frontend anzeigen
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Callback von Discord
+// Discord Callback
 app.get('/callback', async (req, res) => {
   const code = req.query.code;
 
   try {
-    // Access Token holen
-    const tokenResponse = await axios.post('https://discord.com/api/oauth2/token',
+    // Token holen
+    const tokenResponse = await axios.post(
+      'https://discord.com/api/oauth2/token',
       new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
+        client_id: CLIENT_ID,           // kommt aus .env
+        client_secret: CLIENT_SECRET,   // kommt aus .env
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: REDIRECT_URI
+        redirect_uri: REDIRECT_URI      // kommt aus .env
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
@@ -37,9 +41,12 @@ app.get('/callback', async (req, res) => {
     const accessToken = tokenResponse.data.access_token;
 
     // User holen
-    const userResponse = await axios.get('https://discord.com/api/users/@me', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
+    const userResponse = await axios.get(
+      'https://discord.com/api/users/@me',
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
 
     const userId = userResponse.data.id;
 
@@ -49,19 +56,19 @@ app.get('/callback', async (req, res) => {
       { access_token: accessToken },
       {
         headers: {
-          Authorization: `Bot ${BOT_TOKEN}`,
+          Authorization: `Bot ${BOT_TOKEN}`, // kommt aus .env
           'Content-Type': 'application/json'
         }
       }
     );
 
-    // Rolle vergeben
+    // Rolle geben
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${userId}/roles/${ROLE_ID}`,
       {},
       {
         headers: {
-          Authorization: `Bot ${BOT_TOKEN}`
+          Authorization: `Bot ${BOT_TOKEN}` // kommt aus .env
         }
       }
     );
