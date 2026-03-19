@@ -6,10 +6,15 @@
 </head>
 <body>
   <h1>Discord Verifizierung</h1>
+
+  <!-- Button zum Login -->
   <button onclick="loginWithDiscord()">Mit Discord anmelden</button>
 
   <script>
+    // 👉 HIER DEINE CLIENT ID EINTRAGEN (Application ID aus Discord Developer Portal)
     const clientId = "1484252324929994853";
+
+    // 👉 MUSS GENAU gleich sein wie in Discord eingestellt!
     const redirectUri = "http://localhost:3000/callback";
 
     function loginWithDiscord() {
