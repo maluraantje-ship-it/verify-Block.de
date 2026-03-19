@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Discord Verifizierung</title>
+</head>
+<body>
+  <h1>Discord Verifizierung</h1>
+  <button onclick="loginWithDiscord()">Mit Discord anmelden</button>
+
+  <script>
+    const clientId = "1484252324929994853";
+    const redirectUri = "http://localhost:3000/callback";
+
+    function loginWithDiscord() {
+      const url = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20guilds.join`;
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>
